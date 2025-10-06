@@ -27,7 +27,7 @@ def find_face_duplicates(base_folder):
     print("Output directory created at:", location)
 
     out_dirs = {
-        "no_face": os.path.join(location, "no_face"),
+        "no_human_face": os.path.join(location, "no_human_face"),
         "same_person": os.path.join(location, "same_person"),
         "similar_faces": os.path.join(location, "similar_faces"),
         "not_the_same_person": os.path.join(location, "not_the_same_person"),
@@ -51,7 +51,7 @@ def find_face_duplicates(base_folder):
         encodings_raw = pool.map(encode_face, images)
 
     encodings = [e for e in encodings_raw if e is not None]
-    no_face_files = [filename for (img_array, filename), enc in zip(images, encodings_raw) if enc is None]
+    no_human_face_files = [filename for (img_array, filename), enc in zip(images, encodings_raw) if enc is None]
 
     same_person = set()
     similar_faces = set()
@@ -70,8 +70,8 @@ def find_face_duplicates(base_folder):
             else:
                 not_same_person.add(pair)
 
-    print(f"\nGROUP: Images with no face detected ({len(no_face_files)}):")
-    for f in no_face_files:
+    print(f"\nGROUP: Images with no human face detected ({len(no_human_face_files)}):")
+    for f in no_human_face_files:
         print(f)
 
     print(f"\nGROUP: Images of the same person ({len(same_person)}):")
@@ -88,9 +88,9 @@ def find_face_duplicates(base_folder):
 
     print("\nGrouping and sorting complete.")
 
-    for f in no_face_files:
+    for f in no_human_face_files:
         src = os.path.join(base_folder, f)
-        dst = os.path.join(out_dirs["no_face"], f)
+        dst = os.path.join(out_dirs["no_human_face"], f)
         if os.path.exists(src):
             shutil.copy2(src, dst)
 
